@@ -30,3 +30,23 @@ jobs:
       # When tests import third-party packages, add an explicit dependency install.
       - name: Run existing unit tests
         run: python -m unittest discover tests -v
+
+  prototype-tests:
+    name: Prototype JavaScript tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check syntax and scenario logic
+        run: |
+          node --check prototype/app.js
+          node --check prototype/data.js
+          node --check prototype/logic.js
+          node --test prototype/logic.test.mjs

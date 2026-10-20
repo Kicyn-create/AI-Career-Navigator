@@ -6,9 +6,11 @@
 
 ---
 
-# Project Name
+# AI Career Navigator
 
-> A one-sentence description of what your project does and who it is for.
+> Your Skills. Your Future. Your Choice. A career exploration experience that helps people understand their capabilities, examine AI's impact on specific tasks, and test practical development paths.
+
+**Current stage:** Interactive Prototype V0.1. This repository contains a local, scripted demo; it does not yet provide live AI analysis, a deployed app, or completed hackathon submission evidence. See the [founding manifesto](docs/FOUNDING_MANIFESTO.md) for the product principles.
 
 ---
 
@@ -16,23 +18,23 @@
 
 | Field                  | Details                                     |
 | ---------------------- | ------------------------------------------- |
-| **Team Name**          | Your Team Name                              |
-| **Team Domain**        | Domain 1 / Domain 2 *(choose one)*          |
-| **SDG Track (1–17)**   | e.g. SDG 11 — Sustainable Cities and Communities |
-| **Team Leader**        | Leader Name                                 |
-| **University**         | University Name(s)                          |
-| **Number of Members**  | e.g. 4                                      |
+| **Team Name**          | Nexus                                       |
+| **Team Domain**        | To be confirmed by the team (Domain 1 or 2) |
+| **SDG Track (1–17)**   | To be confirmed; the manifesto discusses SDG 4, 8 and 10 |
+| **Team Leader**        | XIE YIFENG                                 |
+| **University**         | Xiamen University Malaysia                 |
+| **Number of Members**  | 5                                          |
 
 ## Links
 
 | Resource          | Link                                           |
 | ----------------- | ---------------------------------------------- |
-| GitHub Repository | https://github.com/your-username/your-project  |
-| Replit Project    | https://replit.com/@your-username/your-project |
-| Live Demo         | https://your-project.replit.app                |
-| RunPod Endpoint   | https://api.runpod.ai/v2/your-endpoint-id      |
-| Slide Deck        | https://example.com/slides                     |
-| Demo Video        | https://example.com/demo-video                 |
+| GitHub Repository | https://github.com/xieyifeng24/AI-Career-Navigator |
+| Replit Project    | Not created yet                                |
+| Live Demo         | Not deployed yet; [run the local prototype](prototype/README.md) |
+| RunPod Endpoint   | Not configured yet                             |
+| Slide Deck        | To be added for submission                    |
+| Demo Video        | To be added for submission                    |
 
 ---
 
@@ -40,27 +42,27 @@
 
 ### Problem
 
-Describe the real-world problem you are solving in 2–4 sentences. Who is affected, and why does it matter?
+People facing AI-driven changes often hear broad claims about whole jobs without understanding which of their own tasks and skills are affected. That makes it hard to distinguish useful opportunities from anxiety, or to choose a realistic next step within time and resource limits. AI Career Navigator starts from a person's actual work and constraints rather than a job-title replacement score.
 
 ### Solution
 
-Explain how your project uses AI to solve the problem and what makes it valuable.
+The intended product will combine a personal profile, evidence-based capability assessment, task-level AI impact analysis, two career paths, and a concrete action plan. **V0.1 validates this flow with two fictional, scripted cases only.** It does not call an AI model or make verified labour-market claims. AI integration and evidence review are future work.
 
 ### Key Features
 
-- **Feature 1** — Short description.
-- **Feature 2** — Short description.
-- **Feature 3** — Short description.
+- **Four-step personal profile** — Background, tasks, skills, AI use, concerns, goals and constraints, with validation and editing.
+- **Explainable mock report** — Three capability lenses and task-level AI impact, with visible evidence limitations.
+- **Two paths and an action plan** — Compare upgrading a current role with exploring an adjacent role, then test a small practical project.
 
 ### Tech Stack
 
 | Layer         | Technology                   |
 | ------------- | ---------------------------- |
-| Frontend      | e.g. HTML, React             |
-| Backend       | e.g. Python, Flask / FastAPI |
-| Database      | e.g. PostgreSQL, SQLite      |
-| AI / Compute  | RunPod (GPU)                 |
-| Hosting / Dev | Replit                       |
+| Frontend      | Vanilla HTML, CSS and JavaScript (local V0.1) |
+| Backend       | None for the prototype; Python standard-library static server for local preview |
+| Database      | None; profile state is held in browser memory |
+| AI / Compute  | None in V0.1; `runpod/handler.py` is the retained official placeholder |
+| Hosting / Dev | Local preview; `.replit` and `src/main.py` are retained official placeholders |
 
 ---
 
@@ -68,11 +70,12 @@ Explain how your project uses AI to solve the problem and what makes it valuable
 
 ```
 .
-├── docs/                    # Screenshots, diagrams
+├── docs/                    # Founding manifesto and team workflow
+├── prototype/               # Local interactive V0.1 (HTML/CSS/JS, mock data)
 ├── runpod/
-│   └── handler.py           # RunPod serverless handler (GPU workload)
+│   └── handler.py           # Official RunPod placeholder, not used by V0.1
 ├── src/
-│   ├── main.py              # Application entry point
+│   ├── main.py              # Official template entry point, not V0.1
 │   └── utils.py             # Helper functions
 ├── submission/              # Required submission documents
 │   ├── SDC2026_TeamName_Preliminary.pdf      # Preliminary submission
@@ -92,41 +95,34 @@ Explain how your project uses AI to solve the problem and what makes it valuable
 ### Architecture
 
 ```
-User ──► Replit (App / API) ──► RunPod Endpoint (GPU model)
-                │
-                └──► Response returned to user
+V0.1: Browser ──► Local static server ──► Scripted demo scenarios
+
+Future submission target: Replit (App / API) ──► RunPod Endpoint
 ```
 
 ---
 
 ## How to Run
 
-### Option 1 — Run on Replit (Recommended)
+### Option 1 — Run the V0.1 prototype locally
 
-1. Open the [Replit Project](https://replit.com/@your-username/your-project), or import this repository via **Create Repl → Import from GitHub**.
-2. Open the **Secrets** tab (🔒) and add the variables listed in `.env.example`:
-   - `RUNPOD_API_KEY`
-   - `RUNPOD_ENDPOINT_ID`
-3. Click **Run**. Replit uses the `.replit` file to start `python src/main.py`.
-
-### Option 2 — Run Locally
+From the repository root, with Python 3.11 or newer:
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/your-project.git
-cd your-project
+python3 prototype/server.py
+```
 
-# 2. Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+Open <http://127.0.0.1:4173>. No API key, package installation or database is needed. The two fictional cases are marked **Demo / Mock**. Answers remain in browser memory for this session and are not uploaded.
 
-# 3. Install dependencies
-pip install -r requirements.txt
+### Option 2 — Official template entry point / future Replit integration
 
-# 4. Configure environment variables
-cp .env.example .env            # then fill in your values
+The retained `.replit` file runs `python src/main.py`. That file still prints the official starter output; it does **not** serve this prototype. Before claiming Replit use for submission, the team must integrate and run the actual app there, configure required secrets, and capture proof of use.
 
-# 5. Run the app
+To run the original template entry point locally:
+
+```bash
+git clone https://github.com/xieyifeng24/AI-Career-Navigator.git
+cd AI-Career-Navigator
 python src/main.py
 ```
 
@@ -134,27 +130,23 @@ python src/main.py
 
 ```bash
 python -m unittest discover tests
+node --check prototype/app.js
+node --check prototype/data.js
+node --check prototype/logic.js
+node --test prototype/logic.test.mjs
 ```
 
 ---
 
 ## How We Use Replit *(Required)*
 
-Describe how your team used Replit. For example:
-
-- **Development:** Collaborative coding in a shared Repl using Multiplayer.
-- **Hosting:** The app is deployed with Replit Deployments at the Live Demo link above.
-- **Secrets:** API keys are stored in Replit Secrets, never in the code.
+**Not completed in V0.1.** The team must import or deploy the application to Replit, verify the actual run command and live demo, store any future secrets in Replit Secrets, and replace the placeholder proof-of-use PDF with genuine evidence.
 
 📄 Proof of use: [`submission/SDC2026_TeamName_Replit_POU.pdf`](submission/SDC2026_TeamName_Replit_POU.pdf)
 
 ## How We Use RunPod *(Required)*
 
-Describe how your team used RunPod. For example:
-
-- **Workload:** Model inference (e.g. text generation, image processing) runs on a RunPod GPU.
-- **Setup:** `runpod/handler.py` is deployed as a **RunPod Serverless Endpoint**.
-- **Integration:** The Replit app sends requests to the endpoint using `RUNPOD_API_KEY` and `RUNPOD_ENDPOINT_ID`.
+**Not completed in V0.1.** `runpod/handler.py` is the official placeholder. A real model workload, endpoint, integration, secure credentials and proof-of-use must be added before the team marks this requirement complete.
 
 Example request:
 
@@ -171,21 +163,23 @@ curl -X POST https://api.runpod.ai/v2/$RUNPOD_ENDPOINT_ID/runsync \
 
 ## Challenges & Learnings
 
-- What challenges did you face, and how did you overcome them?
-- What did your team learn?
+- We kept the official submission structure intact while making the prototype separately runnable under `prototype/`.
+- We made uncertainty and sample-data limits visible throughout the report, so the UX can be tested without claiming verified career analysis.
 
 ## Future Improvements
 
-- [ ] Improvement 1
-- [ ] Improvement 2
+- [ ] Agree on the shared report API and replace scripted scenarios with source-backed analysis.
+- [ ] Connect the required Replit and RunPod workflow, verify the deployment and collect genuine proof of use.
 
 ## Team
 
 | Name        | Role                | GitHub                                   |
 | ----------- | ------------------- | ---------------------------------------- |
-| Member Name | Team Lead / Backend | [@username](https://github.com/username) |
-| Member Name | Frontend            | [@username](https://github.com/username) |
-| Member Name | AI / RunPod         | [@username](https://github.com/username) |
+| XIE YIFENG | Product Lead / team leader | [@xieyifeng24](https://github.com/xieyifeng24) |
+| YANG XUHUI | Tech Lead / backend | GitHub account to be added |
+| CHEN QIANYU | Frontend & UI/UX | GitHub account to be added |
+| LAI HAILU | AI Engineer | GitHub account to be added |
+| ZHANG XINAO | Research & QA | GitHub account to be added |
 
 ---
 
@@ -199,8 +193,8 @@ curl -X POST https://api.runpod.ai/v2/$RUNPOD_ENDPOINT_ID/runsync \
 - [ ] Preliminary submission completed (`SDC2026_TeamName_Preliminary.pdf`)
 - [ ] Technology declaration completed (`SDC2026_TeamName_TechDeclaration.pdf`)
 - [ ] Submission files renamed with your team name (replace `TeamName`)
-- [ ] "How to Run" steps verified
-- [ ] No API keys or secrets committed to the repository
+- [x] V0.1 local "How to Run" steps and tests verified
+- [x] No real API keys or secrets committed with this prototype
 
 ## License
 

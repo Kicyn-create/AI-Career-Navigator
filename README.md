@@ -12,6 +12,8 @@
 
 **Current stage:** Interactive Prototype V0.1. This repository contains a local, scripted demo; it does not yet provide live AI analysis, a deployed app, or completed hackathon submission evidence. See the [founding manifesto](docs/FOUNDING_MANIFESTO.md) for the product principles.
 
+Preview screenshots: [landing page](docs/screenshots/landing-mobile.jpg) · [mock capability report](docs/screenshots/capability-mobile.jpg).
+
 ---
 
 ## Team Information

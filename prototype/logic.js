@@ -8,15 +8,17 @@ export function sampleProfile(scenario) {
   return { ...emptyProfile(), ...cases[scenario].sample, scenario };
 }
 
-export function validateStep(profile, index) {
+export function validateStep(profile, index, mode='demo') {
   const errors = {};
   for (const field of steps[index].fields) {
+    if(field==='scenario' && mode==='live') continue;
     if (!String(profile[field] ?? '').trim()) errors[field] = 'Please complete this field.';
   }
   if (index === 3 && profile.hours) {
     const n = Number(profile.hours);
     if (!Number.isFinite(n) || n < 1 || n > 40) errors.hours = 'Choose 1–40 hours per week.';
   }
+  if(index===3 && mode==='live' && profile.synthetic!==true) errors.synthetic='Confirm that the profile is fictional before sending it.';
   return errors;
 }
 

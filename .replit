@@ -1,5 +1,15 @@
-run = "python src/main.py"
-entrypoint = "src/main.py"
+run = "python -m uvicorn src.career.api:app --host 0.0.0.0 --port 8000"
+entrypoint = "src/career/api.py"
+modules = ["python-3.12"]
 
 [nix]
 channel = "stable-24_05"
+
+[deployment]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "python -m pip install -r requirements.txt"]
+run = ["sh", "-c", "python -m uvicorn src.career.api:app --host 0.0.0.0 --port 8000 --workers 1"]
+
+[[ports]]
+localPort = 8000
+externalPort = 80

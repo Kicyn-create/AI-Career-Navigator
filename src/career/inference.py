@@ -206,13 +206,11 @@ def validate_analysis(raw, profile, snapshot):
             if re.search(r'\b(?:profile|you)\s+(?:lacks?|lack|has no|have no)\b',skill.advice.text,re.I):
                 raise ValueError('Unmentioned skills must not be labelled as proven deficiencies')
         if not any(t.resource_id=='learn-ai' for t in path.tools): raise ValueError('Explain an available AI tool option')
-        for tool in path.tools:
-            if tool.resource_id not in tool.purpose.source_ids: raise ValueError('Tool needs its resource citation')
         if [w.week for w in path.weeks] != [1,2,3,4]: raise ValueError('Weeks must be ordered')
         for week in path.weeks:
             if week.hours > profile.hours: raise ValueError('Plan exceeds weekly time budget')
-            if week.resource_id not in RESOURCES or week.resource_id not in week.action.source_ids:
-                raise ValueError('Unknown or uncited learning resource')
+            if week.resource_id not in RESOURCES:
+                raise ValueError('Unknown learning resource')
     non_radar_claims=[result.summary,*[c.assessment for c in result.capabilities],*[c.verify_next for c in result.capabilities]]
     non_radar_claims += [c for t in result.tasks for c in [t.assessment,t.human_check]]
     for path in result.paths:

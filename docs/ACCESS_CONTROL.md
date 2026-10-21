@@ -69,3 +69,15 @@ Offline tests cover anonymous success, absent/tampered session and CSRF rejectio
 cross-origin rejection, owner-only results, mandatory fictional consent, session/IP
 limits, new-session bypass attempts, atomic global ceilings and restart persistence.
 They use labelled synthetic provider fixtures and spend no GPU credits.
+
+## Published result
+
+Published to the existing Autoscale site on 21 October 2026 after the owner's
+explicit approval of public anonymous access. Code revision 5cdb037 includes
+51da946; the Replit deployment also retains its platform-only dependency commits.
+27 Python and 9 JavaScript checks passed. Production checks: session HTTP 200 with
+HttpOnly/Secure/SameSite=Strict cookie, missing-CSRF HTTP 403, unconfirmed fictional
+data HTTP 422, and no access-code field in the browser. No paid inference was
+performed for this update. Evidence: evidence/anonymous-access-release.json and
+evidence/production-no-access-code.png. Previous real-inference acceptance remains
+in RELEASE.md; its old shared-code instructions are obsolete.

@@ -6,11 +6,12 @@ A career exploration application for fictional marketing/administration profiles
 adjacent analytical roles. It combines current public occupational sources,
 explainable matching, and a server-side RunPod inference integration.
 
-**Status (21 October 2026):** the candidate runs locally; public-source retrieval and
-matching work. Real-model integration is implemented and contract-tested but **not
-live-verified**: the RunPod endpoint has now been provisioned, and secure key setup/live checks are in progress.
-The existing public URL still serves the earlier **scripted V0.1 demo**. This is
-not yet a competition-ready AI release. See [evidence](docs/EVIDENCE.md).
+**Status (21 October 2026):** published to the existing Replit project using
+Autoscale and real RunPod inference. A production Chrome journey passed: fictional
+profile → real GPU report → both paths → four-week plan. No mock fallback.
+[Open the app](https://ai-career-navigator-xyf20070924.replit.app/).
+Team access code is required. Allow several minutes for GPU cold start.
+See [release evidence](docs/RELEASE.md) and [known limitations](docs/KNOWN_ISSUES.md).
 
 ## Team information
 

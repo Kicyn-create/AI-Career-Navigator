@@ -4,9 +4,9 @@ Owner requested Release / Delivery mode: freeze features, stop repeated GPU
 quality optimisation, and accept one successful production browser journey as
 this stage's delivery gate. Non-blocking limitations are in KNOWN_ISSUES.md.
 
-Candidate code: `4397ee7` on `codex/real-ai-mvp` (PR #3). Main was not changed.
-Basic checks: 22 Python tests and 8 Node tests passed. Replit's actual Python
-3.12.12 environment also passed all 22 Python tests using uv 0.9.5.
+Initial candidate code: `4397ee7` on `codex/real-ai-mvp` (PR #3). Main was not changed.
+Basic checks: 23 Python tests and 8 Node tests passed. Replit's actual Python
+3.12.12 environment also passed all 23 Python tests using uv 0.9.5.
 
 Existing project only: https://replit.com/@xyf20070924/AI-Career-Navigator
 Requested public domain: https://ai-career-navigator-xyf20070924.replit.app/
@@ -21,3 +21,24 @@ backup was deleted. Replit-created `.replit` Git-package change was also stashed
 before fast-forwarding the candidate branch.
 
 Publication and the single production acceptance result will be recorded below.
+
+## Accepted production release
+
+Core transport fix: GitHub commit `5677223`; Replit preserved its own deployment
+commit and merged this revision without rewriting history. New `/api/analyses`
+start/status routes keep cold starts off a single long proxy connection; existing
+`/api/analyze` remains compatible. Results are temporary in-memory data.
+
+Production Chrome acceptance **PASSED** on 21 October 2026. Report:
+`cc313db4-4184-4e0e-9f47-241170349519`, source snapshot `36cc020805d9b004`.
+Entered a fictional marketing profile, submitted through the real backend, waited
+for RunPod, viewed all four report pages, selected Path B and viewed its four-week
+plan. No further GPU quality testing was performed after success.
+
+Evidence: `evidence/production-acceptance.json`, `production-real-report.png`,
+`production-action-plan.png`. Domain was successfully retained. The first long
+connection failed; the released background-task transport resolved that core issue.
+
+Ready for a hackathon demonstration with internet access, available GPU credits,
+the private team code and time for cold start. The demo is exploratory career
+learning support, not validated professional advice or a production SaaS system.

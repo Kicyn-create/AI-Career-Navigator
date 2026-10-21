@@ -91,3 +91,10 @@ source/identity/time validation and human review bound the resulting risk.
 Coordinate contract changes with Y, C, L and Z before merging. The current upgrade
 is a reviewable feature branch; no integration coordination has been claimed on
 behalf of team members.
+
+## Released cold-start transport
+
+The browser submits to POST `/api/analyses` and polls GET `/api/analyses/{job_id}`
+every three seconds with the same team access code. The backend executes real
+inference in a bounded background task and temporarily holds the result in memory.
+The existing synchronous route remains available. No database was introduced.

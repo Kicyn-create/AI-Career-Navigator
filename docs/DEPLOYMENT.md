@@ -1,3 +1,11 @@
+# Current release
+
+Production is now Autoscale and accepted. See RELEASE.md for the actual result.
+The owner explicitly approved the required Static unpublish operation and its
+history/domain risks; the domain was retained. Code rollback branch remains.
+The runbook below includes historical pre-release notes. Do not restart repeated
+GPU quality optimisation as a condition of this delivery.
+
 # Replit release runbook and rollback
 
 Target only the existing project:

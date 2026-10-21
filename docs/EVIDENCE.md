@@ -1,3 +1,13 @@
+# Current delivery result — production accepted
+
+See RELEASE.md and evidence/production-acceptance.json. The existing Replit domain
+now runs Autoscale with real RunPod inference. The production browser journey
+passed, including all report pages, path switch and action plan. Basic checks:
+23 Python / 8 Node passed. Further paid evaluation stopped after acceptance.
+
+The earlier audit/evaluation record below is historical; its pending-release
+statements have been superseded by the accepted release above.
+
 # Verification evidence — 21 October 2026
 
 ## Actual state

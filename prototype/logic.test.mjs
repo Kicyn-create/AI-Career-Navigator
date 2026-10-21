@@ -35,14 +35,14 @@ test('model text is escaped before rendering', () => {
 });
 test('failed AI request never substitutes scripted output', async () => {
   const original=globalThis.fetch;
-  globalThis.fetch=async()=>({ok:false,json:async()=>({detail:'RunPod unavailable'})});
-  try { await assert.rejects(()=>requestAnalysis(sampleProfile('admin'),'test'),/RunPod unavailable/); }
+  globalThis.fetch=async url=>url==='/api/session'?({ok:true,json:async()=>({csrf_token:'fixture-token'})}):({ok:false,json:async()=>({detail:'RunPod unavailable'})});
+  try { await assert.rejects(()=>requestAnalysis(sampleProfile('admin')),/RunPod unavailable/); }
   finally {globalThis.fetch=original;}
 });
 test('a mock-shaped response cannot masquerade as real inference', async () => {
   const original=globalThis.fetch;
-  globalThis.fetch=async()=>({ok:true,json:async()=>({mode:'demo',analysis:{}})});
-  try {await assert.rejects(()=>requestAnalysis(sampleProfile('admin'),'test'),/did not identify real inference/);}
+  globalThis.fetch=async url=>({ok:true,json:async()=>url==='/api/session'?{csrf_token:'fixture-token'}:{mode:'demo',analysis:{}}});
+  try {await assert.rejects(()=>requestAnalysis(sampleProfile('admin')),/did not identify real inference/);}
   finally {globalThis.fetch=original;}
 });
 
@@ -62,4 +62,11 @@ test('all live report sections render from the synthetic contract fixture', () =
   assert.ok(html.includes('NO AI INFERENCE'));
   report.analysis.summary.text='<script>alert(1)</script>';
   assert.ok(!renderLiveReport(report,'capability','A').includes('<script>'));
+});
+
+test('anonymous request uses CSRF and no shared access code', async () => {
+  const original=globalThis.fetch;const seen=[];
+  globalThis.fetch=async(url,options)=>{seen.push({url,options});return {ok:true,json:async()=>url==='/api/session'?{csrf_token:'fixture-token'}:{mode:'real-ai',analysis:{},inference:{request_id:'FIXTURE-NOT-LIVE'}}};};
+  try {await requestAnalysis({...sampleProfile('admin'),synthetic:true});assert.equal(seen[1].options.headers['X-CSRF-Token'],'fixture-token');assert.ok(!('X-Demo-Code' in seen[1].options.headers));assert.equal(JSON.parse(seen[1].options.body).synthetic,true);}
+  finally {globalThis.fetch=original;}
 });

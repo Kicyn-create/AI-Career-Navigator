@@ -15,10 +15,11 @@ confirm current status again immediately before any release.
 
 1. Complete RunPod setup in `runpod/README.md`; record current pricing and obtain
    owner approval before paid resources. No keys in Git or chat.
-2. Run offline tests and five live cases. Review source entailment, differing
-   occupation/skill outputs, 1h versus 8h feasibility, model disclosure and citations.
-3. Review/merge the new PR with Y and affected members. PR #2 is the inherited UI;
-   do not merge it independently merely because it exists.
+2. Run basic offline checks. Following the owner’s release instruction, perform
+   one real end-to-end acceptance on production; record non-blocking advice issues
+   in KNOWN_ISSUES.md instead of delaying release for repeated GPU evaluation.
+3. Deploy the exact feature-branch SHA to the existing project. Main remains
+   protected; PR review can proceed independently of the hackathon release.
 4. In Replit Shell, inspect `git status` and preserve the current release with a new
    local backup branch. Do not overwrite uncommitted work. Fetch GitHub and check
    out the reviewed exact candidate SHA on a new branch. No force push/reset.
@@ -32,10 +33,10 @@ confirm current status again immediately before any release.
 ## Production release gate
 
 - Offline CI green, exact release SHA recorded, source feed live.
-- RunPod model/image revision, real request IDs, latency and quality results recorded.
-- Preview journey verified with synthetic input, no accidental scripted fallback.
+- RunPod configured; model disclosed; basic contract/security checks pass.
+- Real inference required, no accidental scripted fallback. One production journey is the acceptance check.
 - Current production configuration/screenshots and rollback branch retained.
-- Owner approves the concrete release and current Autoscale/GPU costs.
+- Owner explicitly requested immediate release on 21 October 2026; existing budget and rollback points retained.
 
 Then switch Publishing from Static to **Autoscale** in this same project. The
 candidate `.replit` uses `deploymentTarget="cloudrun"` per Replit documentation.

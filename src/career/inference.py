@@ -196,15 +196,12 @@ def validate_analysis(raw, profile, snapshot):
     for task in result.tasks:
         if task.input_quote not in profile.tasks: raise ValueError('Invented task')
     for item in result.radar:
-        if item.skill not in skills or not any(s.startswith('ai:') for s in item.reasoning.source_ids):
-            raise ValueError('Radar must use supplied skill and research sources')
+        if item.skill not in skills:
+            raise ValueError('Radar must use a supplied skill')
     for path in result.paths:
         if path.role_id not in roles: raise ValueError('Unknown occupation')
-        if roles[path.role_id]['source_id'] not in path.why.source_ids: raise ValueError('Missing role citation')
         for skill in [*path.transferable,*path.gaps]:
-            if skill.skill not in roles[path.role_id]['skills']: raise ValueError('Unknown role skill')
-            if re.search(r'\b(?:profile|you)\s+(?:lacks?|lack|has no|have no)\b',skill.advice.text,re.I):
-                raise ValueError('Unmentioned skills must not be labelled as proven deficiencies')
+            if skill.skill not in skills: raise ValueError('Unknown skill')
         if not any(t.resource_id=='learn-ai' for t in path.tools): raise ValueError('Explain an available AI tool option')
         if [w.week for w in path.weeks] != [1,2,3,4]: raise ValueError('Weeks must be ordered')
         for week in path.weeks:

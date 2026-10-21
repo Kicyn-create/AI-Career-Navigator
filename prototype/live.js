@@ -4,9 +4,20 @@ const e=escapeHTML;
 const safeURL=value=>String(value).startsWith('https://') ? e(value) : '#';
 export async function requestAnalysis(profile, code, signal) {
   const {scenario, ...fields}=profile;
-  const response=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json','X-Demo-Code':code},body:JSON.stringify({...fields,hours:Number(fields.hours)}),signal});
-  const data=await response.json().catch(()=>({detail:'The server returned an unreadable response.'}));
+  const headers={'Content-Type':'application/json','X-Demo-Code':code};
+  const response=await fetch('/api/analyses',{method:'POST',headers,body:JSON.stringify({...fields,hours:Number(fields.hours)}),signal});
+  let data=await response.json().catch(()=>({detail:'The server returned an unreadable response.'}));
   if(!response.ok) throw new Error(typeof data.detail==='string'?data.detail:'Analysis failed. Check your answers and try again.');
+  if(data.job_id){
+    const jobId=data.job_id;
+    for(let attempt=0;attempt<160;attempt++){
+      await new Promise((resolve,reject)=>{const timer=setTimeout(resolve,3000);signal?.addEventListener('abort',()=>{clearTimeout(timer);reject(new DOMException('Aborted','AbortError'));},{once:true});});
+      const poll=await fetch(`/api/analyses/${encodeURIComponent(jobId)}`,{headers,signal});
+      const status=await poll.json();
+      if(!poll.ok||status.status==='error') throw new Error(status.detail||'Analysis is unavailable. Please retry.');
+      if(status.status==='complete'){data=status.result;break;}
+    }
+  }
   if(data.mode!=='real-ai' || !data.analysis || !data.inference?.request_id) throw new Error('The response did not identify real inference. No report was displayed.');
   return data;
 }

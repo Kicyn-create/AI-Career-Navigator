@@ -136,6 +136,20 @@ class API(unittest.TestCase):
         self.assertEqual(r.status_code,200);self.assertEqual(r.json()['mode'],'source-matching')
         self.assertNotIn('analysis',r.json());self.assertEqual(r.json()['ranking'][0]['id'],'marketing')
 
+    def test_background_analysis_is_gated_and_pollable(self):
+        from src.career.models import Analysis
+        with patch.dict(os.environ,{'DEMO_ACCESS_CODE':'test-code'}):
+            app.state.inference.key='test';app.state.inference.endpoint='test-id'
+            self.assertEqual(self.client.post('/api/analyses',json=profile().model_dump()).status_code,401)
+            with patch.object(app.state.sources,'get',new=AsyncMock(return_value=snapshot())),patch.object(app.state.inference,'analyze',new=AsyncMock(return_value=(Analysis.model_validate(analysis()),{'request_id':'TEST-FIXTURE-NOT-LIVE','model':'FIXTURE'}))):
+                response=self.client.post('/api/analyses',json=profile().model_dump(),headers={'X-Demo-Code':'test-code'})
+                self.assertEqual(response.status_code,202)
+                url='/api/analyses/'+response.json()['job_id']
+                self.assertEqual(self.client.get(url).status_code,401)
+                result=self.client.get(url,headers={'X-Demo-Code':'test-code'}).json()
+                self.assertEqual(result['status'],'complete')
+                self.assertEqual(result['result']['mode'],'real-ai')
+
     def test_successful_analysis_http_contract_is_fixture_not_live_evidence(self):
         from src.career.models import Analysis
         with patch.dict(os.environ,{'DEMO_ACCESS_CODE':'test-code'}):

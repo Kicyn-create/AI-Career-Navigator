@@ -27,7 +27,15 @@ async def lifespan(app):
         app.state.busy=False
         app.state.calls=[]
         app.state.last_inference=None
+        app.state.jobs={}
+        app.state.tasks=set()
         yield
+        for task in app.state.tasks: task.cancel()
+
+def check_demo_access(request):
+    access=os.getenv('DEMO_ACCESS_CODE','')
+    if not access or not hmac.compare_digest(request.headers.get('X-Demo-Code',''),access):
+        raise HTTPException(401,'Enter the demo access code supplied by the team.')
 
 app=FastAPI(title='AI Career Navigator',version='0.2.0',lifespan=lifespan,docs_url=None,redoc_url=None,openapi_url=None)
 
@@ -97,6 +105,32 @@ async def analyze(profile: Profile, request: Request):
     except (SourceUnavailable, InferenceError) as exc: raise HTTPException(503,str(exc)) from exc
     except TimeoutError as exc: raise HTTPException(504,'Analysis exceeded the time limit. Retry later.') from exc
     finally: app.state.busy=False
+
+@app.post('/api/analyses',status_code=202)
+async def start_analysis(profile: Profile,request: Request):
+    check_demo_access(request)
+    if not app.state.inference.configured: raise HTTPException(503,'RunPod is not configured.')
+    if app.state.busy or app.state.tasks: raise HTTPException(429,'An analysis is already running. Please wait a few minutes.')
+    # Results are ephemeral and gated by the same team code. No database or profiles
+    # are persisted. Polling avoids keeping a proxy connection open during cold start.
+    app.state.jobs={k:v for k,v in app.state.jobs.items() if time.monotonic()-v['created']<1800}
+    job_id=str(uuid.uuid4())
+    job={'created':time.monotonic(),'status':'running'}
+    app.state.jobs[job_id]=job
+    async def run():
+        try: job.update(status='complete',result=await analyze(profile,request))
+        except HTTPException as exc: job.update(status='error',detail=exc.detail)
+        except Exception: job.update(status='error',detail='Analysis could not complete. Your answers are preserved; please retry.')
+    task=asyncio.create_task(run());app.state.tasks.add(task)
+    task.add_done_callback(app.state.tasks.discard)
+    return {'job_id':job_id,'status':'running'}
+
+@app.get('/api/analyses/{job_id}')
+async def analysis_status(job_id: str,request: Request):
+    check_demo_access(request)
+    job=app.state.jobs.get(job_id)
+    if not job: raise HTTPException(404,'This analysis expired after a restart. Please submit again.')
+    return {k:v for k,v in job.items() if k!='created'}
 
 @app.post('/api/match')
 async def match(profile: Profile):

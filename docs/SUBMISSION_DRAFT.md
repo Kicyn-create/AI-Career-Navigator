@@ -90,11 +90,11 @@ have not been claimed as completed research.
    (MIT), HTTPX (BSD-3-Clause), Uvicorn (BSD-3-Clause), Beautiful Soup (MIT),
    python-dotenv (BSD-3-Clause); verify all transitive licences before final signing.
 3. **APIs/cloud:** O*NET public pages and arXiv public RSS (actual retrieval);
-   RunPod vLLM API (implemented, not used live); Replit Static (existing actual use),
+   RunPod vLLM API (real smoke inference verified; report quality evaluation ongoing); Replit Static (existing actual use),
    Autoscale (planned, not yet released); GitHub hosting/PR/CI. Regions, account
    tiers, credits and GPU price must be recorded from actual accounts.
-4. **Models/data:** planned Qwen3-4B-Instruct-2507, pretrained, Apache-2.0, no training or
-   fine-tuning. Pin actual model revision and worker digest at provisioning. O*NET
+4. **Models/data:** Qwen3-4B-Instruct-2507, pretrained, Apache-2.0, no training or
+   fine-tuning. Model revision cdbee75f17c01a7cc42f958dc650907174af0554; official worker v2.29.0. Record image digest before final signing. O*NET
    occupational information, USDOL/ETA, CC BY 4.0; adaptations are matching/SDG
    interpretations. arXiv titles/abstracts with article links, each article's licence
    remains its own; no full-paper redistribution. UN target definitions; curated

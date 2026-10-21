@@ -81,7 +81,7 @@ async def analyze(profile: Profile, request: Request):
     app.state.busy=True
     app.state.calls.append(now)
     try:
-        async with asyncio.timeout(280):
+        async with asyncio.timeout(420):
             snapshot=await app.state.sources.get()
             if not snapshot['research']:
                 raise SourceUnavailable('AI research signals are unavailable. Retry when the feed returns; no unsourced AI trend analysis was generated.')

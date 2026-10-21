@@ -32,7 +32,7 @@ def main():
     if not code: parser.exit(2,'DEMO_ACCESS_CODE is missing. No requests sent.\n')
     out=Path('.cache/live-evaluation');out.mkdir(parents=True,exist_ok=True)
     records=[]
-    with httpx.Client(timeout=300) as client:
+    with httpx.Client(timeout=450) as client:
         for name,fields in CASES.items():
             start=time.monotonic()
             response=client.post(args.base_url.rstrip('/')+'/api/analyze',json=fields,headers={'X-Demo-Code':code})

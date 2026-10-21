@@ -52,8 +52,8 @@ calibrated for hiring, aptitude, qualification, or replacement probability.
 RunPod's OpenAI-compatible vLLM endpoint. Proposed pretrained model:
 `Qwen/Qwen3-4B-Instruct-2507`. Actual worker digest and model revision must be recorded
 at deployment. No automatic retries that could create unexpected duplicate spend.
-A user can retry after an error. Maximum output 6,500 tokens, upstream timeout 180s,
-whole analysis deadline 280s. Cold starts/long outputs may fail and require tuning.
+A user can retry after an error. Maximum output 6,500 tokens, upstream timeout 360s,
+whole analysis deadline 420s. Cold starts/long outputs may fail and require tuning.
 
 Server validation requires all capability lenses, literal input task/evidence
 quotes, known citations, real retrieved role/skill IDs, two distinct role paths,

@@ -47,7 +47,7 @@ class TaskAssessment(StrictModel):
 class SDGLink(StrictModel):
     target: Literal['4.4', '8.2', '8.5']
     rationale: Text
-    measure: Text
+    measure: Annotated[str, Field(min_length=20, max_length=500)]
 
 class SkillAdvice(StrictModel):
     skill: Short
@@ -62,6 +62,10 @@ class Week(StrictModel):
     validation: Text
     resource_id: Short
 
+class ToolChoice(StrictModel):
+    resource_id: Literal['learn-ai','learn-data','learn-python','learn-sheets']
+    purpose: Claim
+
 class Path(StrictModel):
     kind: Literal['A', 'B']
     role_id: Short
@@ -71,6 +75,7 @@ class Path(StrictModel):
     challenge: Claim
     next_step: Claim
     sdg: SDGLink
+    tools: Annotated[list[ToolChoice], Field(min_length=1, max_length=3)]
     weeks: Annotated[list[Week], Field(min_length=4, max_length=4)]
     day30_review: Claim
 

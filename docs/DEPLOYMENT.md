@@ -22,10 +22,10 @@ confirm current status again immediately before any release.
 4. In Replit Shell, inspect `git status` and preserve the current release with a new
    local backup branch. Do not overwrite uncommitted work. Fetch GitHub and check
    out the reviewed exact candidate SHA on a new branch. No force push/reset.
-5. Install `python -m pip install -r requirements.txt`. Configure Replit **Secrets**:
+5. Install `uv venv .venv-replit && uv pip install --python .venv-replit/bin/python -r requirements.txt`. Configure Replit **Secrets**:
    `RUNPOD_API_KEY`, `RUNPOD_ENDPOINT_ID`, `RUNPOD_MODEL`, `DEMO_ACCESS_CODE`,
    `MAX_DAILY_ANALYSES=20`. Do not expose these through screenshot/debug output.
-6. Start `python -m uvicorn src.career.api:app --host 0.0.0.0 --port 8000 --workers 1`.
+6. Start `sh scripts/replit_start.sh`.
    Verify the development preview and all required pages. Configuration health is
    not a model health test; generate a real report.
 
@@ -39,7 +39,7 @@ confirm current status again immediately before any release.
 
 Then switch Publishing from Static to **Autoscale** in this same project. The
 candidate `.replit` uses `deploymentTarget="cloudrun"` per Replit documentation.
-Build: `python -m pip install -r requirements.txt`. Run command as above. Port 8000,
+Build: `uv venv .venv-replit && uv pip install --python .venv-replit/bin/python -r requirements.txt`. Run command as above. Port 8000,
 one instance/worker for the prototype's in-process concurrency/quota controls.
 Keep the existing domain; confirm the Publishing UI allows the type change without
 losing it. If the UI requires deleting the existing deployment, stop for review of
@@ -58,11 +58,18 @@ as public directory, and verify the same public domain. Do not rewrite GitHub
 history. Turn off/scale down unused RunPod workers to prevent unintended usage;
 check account usage, without assuming that a frontend rollback stops GPU billing.
 
+## Replit dependency runtime
+
+The actual workspace provides uv 0.9.5 and an externally managed Nix Python 3.12.12.
+System pip installation is rejected; even `python -m venv` inherits a user-install
+setting. Use the verified uv virtual environment instead of weakening system protection.
+`.venv-replit/` is ignored by Git.
+
 ## Current blockers
 
 RunPod endpoint is provisioned and an endpoint-restricted key is stored locally.
 The owner approved up to US$2 in live evaluation. The short real-model smoke
-request passed; full report evaluation and Replit Secrets setup are in progress.
+request passed; Replit Secrets are configured; full report evaluation is in progress.
 Candidate has not been published over production. Retaining the
 working demo is intentional until the release gate is satisfied.
 

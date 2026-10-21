@@ -8,7 +8,7 @@ import httpx
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 from src.career.api import app
-from src.career.inference import RunPod, InferenceError, make_messages, validate_analysis, output_schema
+from src.career.inference import RunPod, InferenceError, make_messages, validate_analysis, output_schema, normalize_generation
 from src.career.matching import rank_roles
 from src.career.models import Profile
 from src.career.sources import parse_role, parse_research, SourceUnavailable, SourceStore
@@ -42,10 +42,21 @@ class Contracts(unittest.TestCase):
         self.assertIn('"hours": 1.0',make_messages(profile(hours=1),snapshot(),[])[1]['content'])
 
     def test_generation_schema_separates_input_quotes_from_database_tasks(self):
-        p=profile();s=output_schema(p,snapshot())['$defs']
+        p=profile();schema=output_schema(p,snapshot());s=schema['$defs']
         self.assertTrue(all(q in p.tasks for q in s['TaskAssessment']['properties']['input_quote']['enum']))
-        self.assertTrue(all(any(q in text for text in [p.tasks,p.skills,p.aiUse]) for q in s['Capability']['properties']['evidence_quote']['enum']))
+        for variant in schema['properties']['capabilities']['properties'].values():
+            self.assertTrue(all(any(q in text for text in [p.tasks,p.skills,p.aiUse]) for q in variant['properties']['evidence_quote']['enum']))
         self.assertEqual(s['Path']['properties']['role_id']['enum'],['marketing','project'])
+
+    def test_keyed_generation_preserves_all_required_sections(self):
+        raw=analysis()
+        for field,key in [('capabilities','lens'),('paths','kind'),('scenarios','pace')]:
+            raw[field]={item[key]:item for item in reversed(raw[field])}
+        normalized=normalize_generation(raw)
+        result=validate_analysis(normalized,profile(),snapshot())
+        self.assertEqual([c.lens for c in result.capabilities],['independent','collaboration','extended'])
+        del raw['capabilities'][1]
+        with self.assertRaises(ValueError):validate_analysis(raw,profile(),snapshot())
 
     def test_rejects_invalid_model_output(self):
         mutations=[lambda a:a['summary'].update(source_ids=['invented']),lambda a:a['tasks'][0].update(input_quote='Invented task'),

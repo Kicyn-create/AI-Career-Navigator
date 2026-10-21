@@ -30,6 +30,7 @@ def analysis(p=None):
         source=f'onet:{role}'
         paths.append({'kind':kind,'role_id':role,'why':claim(source=source),'transferable':[skill(name,source)],'gaps':[skill(name,source)],
           'challenge':claim(source=source),'next_step':claim(source=source),'sdg':sdg(),
+          'tools':[{'resource_id':'learn-ai','purpose':claim(source='learn-ai')}],
           'weeks':[{'week':i,'hours':p.hours,'action':claim(source='learn-sheets'),'deliverable':'One synthetic worksheet',
                     'validation':'Check five rows against source','resource_id':'learn-sheets'} for i in range(1,5)],'day30_review':claim(source=source)})
     return {'summary':claim(), 'capabilities':[{'lens':l,'assessment':claim(),'evidence_quote':p.skills,'verify_next':claim()} for l in ['independent','collaboration','extended']],

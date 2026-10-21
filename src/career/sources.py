@@ -19,6 +19,8 @@ RESOURCES = {
     'learn-python': {'title': 'Python official tutorial', 'url': 'https://docs.python.org/3/tutorial/', 'note': 'Free documentation; no certificate or employment promise.'},
     'learn-sheets': {'title': 'Google Sheets training and help', 'url': 'https://support.google.com/a/users/answer/9282959', 'note': 'Free help materials; use synthetic spreadsheet data.'},
 }
+for resource_id,tool in {'learn-ai':'Microsoft Copilot','learn-data':'Power BI','learn-python':'Python','learn-sheets':'Google Sheets'}.items():
+    RESOURCES[resource_id]['tool']=tool
 SDGS = {
     'sdg4': {'title': 'UN SDG 4, target 4.4', 'url': 'https://sdgs.un.org/goals/goal4', 'date': 'Target framework', 'kind': 'sdg', 'text': 'Relevant technical and vocational skills for employment, decent jobs and entrepreneurship.'},
     'sdg8': {'title': 'UN SDG 8, targets 8.2 and 8.5', 'url': 'https://sdgs.un.org/goals/goal8', 'date': 'Target framework', 'kind': 'sdg', 'text': 'Productivity through upgrading and innovation; productive employment and decent work.'},
@@ -42,18 +44,22 @@ def parse_role(html, role_id):
             'growth': growth[2], 'period': growth[1], 'updated': updated[1] if updated else 'Not supplied',
             'url': f'https://www.onetonline.org/link/summary/{role_id}', 'source_id': f'onet:{role_id}'}
 
-def parse_research(xml):
+def parse_research(xml, relevant_only=False):
     root = ET.fromstring(xml)
     items = []
-    for entry in root.findall('./channel/item')[:4]:
+    for entry in root.findall('./channel/item')[:300]:
+        title=' '.join(entry.findtext('title', '').split())
+        if relevant_only and not re.search(r'cowork|workplace|office|spreadsheet|business requests|corporate|organizational|financial review|financial evidence',title,re.I):
+            continue
         raw = entry.findtext('link', '')
         if not re.fullmatch(r'https?://arxiv.org/abs/[\w./-]+', raw):
             continue
         date=parsedate_to_datetime(entry.findtext('pubDate', '')).date().isoformat()
-        items.append({'id': f'ai:{len(items)+1}', 'title': ' '.join(entry.findtext('title', '').split()),
+        items.append({'id': f'ai:{len(items)+1}', 'title': title,
                       'text': BeautifulSoup(entry.findtext('description',''),'html.parser').get_text(' ',strip=True)[:2200],
                       'url': raw.replace('http:', 'https:'), 'date': date,
                       'kind': 'research', 'limitation': 'Preprint; research signal, not proven workplace adoption or job demand.'})
+        if len(items)==4: break
     if not items:
         raise SourceUnavailable('No AI research signals returned.')
     return items
@@ -86,7 +92,7 @@ class SourceStore:
                 response = await self.client.get('https://rss.arxiv.org/rss/cs.AI', timeout=15)
                 response.raise_for_status()
                 if len(response.content)>3_000_000: raise SourceUnavailable('Research feed too large')
-                research = parse_research(response.text)
+                research = parse_research(response.text,relevant_only=True)
             except (httpx.HTTPError, SourceUnavailable, ET.ParseError, ValueError, TypeError):
                 warnings.append('AI research feed unavailable. AI-trend claims cannot be generated until it returns.')
             sources = {f'onet:{r["id"]}': {'title':r['title'], 'url':r['url'], 'date':f"Updated {r['updated']}; projection {r['period']}", 'kind':'occupation', 'text': f"Skills: {', '.join(r['skills'])}. Tasks: {' '.join(r['tasks'])} US projected growth: {r['growth']}."} for r in roles}

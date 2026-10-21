@@ -182,6 +182,17 @@
           "rationale": "Practice a skill using synthetic evidence.",
           "measure": "Complete and review one sample."
         },
+        "tools": [
+          {
+            "resource_id": "learn-ai",
+            "purpose": {
+              "text": "SYNTHETIC CONTRACT FIXTURE",
+              "source_ids": [
+                "learn-ai"
+              ]
+            }
+          }
+        ],
         "weeks": [
           {
             "week": 1,
@@ -301,6 +312,17 @@
           "rationale": "Practice a skill using synthetic evidence.",
           "measure": "Complete and review one sample."
         },
+        "tools": [
+          {
+            "resource_id": "learn-ai",
+            "purpose": {
+              "text": "SYNTHETIC CONTRACT FIXTURE",
+              "source_ids": [
+                "learn-ai"
+              ]
+            }
+          }
+        ],
         "weeks": [
           {
             "week": 1,
@@ -546,24 +568,28 @@
         "title": "Microsoft Learn: AI learning hub",
         "url": "https://learn.microsoft.com/en-us/ai/",
         "note": "Free reading modules; paid exams or cloud usage excluded.",
+        "tool": "Microsoft Copilot",
         "kind": "learning"
       },
       "learn-data": {
         "title": "Microsoft Learn: Power BI learning",
         "url": "https://learn.microsoft.com/en-us/training/powerplatform/power-bi",
         "note": "Free learning materials; use public sample data, check tool licensing.",
+        "tool": "Power BI",
         "kind": "learning"
       },
       "learn-python": {
         "title": "Python official tutorial",
         "url": "https://docs.python.org/3/tutorial/",
         "note": "Free documentation; no certificate or employment promise.",
+        "tool": "Python",
         "kind": "learning"
       },
       "learn-sheets": {
         "title": "Google Sheets training and help",
         "url": "https://support.google.com/a/users/answer/9282959",
         "note": "Free help materials; use synthetic spreadsheet data.",
+        "tool": "Google Sheets",
         "kind": "learning"
       },
       "sdg4": {

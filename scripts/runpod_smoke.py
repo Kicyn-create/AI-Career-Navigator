@@ -17,7 +17,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from src.career.sources import SourceStore
 from src.career.models import Profile, Analysis
 from src.career.matching import rank_roles
-from src.career.inference import make_messages, validate_analysis, output_schema
+from src.career.inference import make_messages, validate_analysis, output_schema, normalize_generation
 from scripts.live_check import BASE
 
 async def run(full):
@@ -43,7 +43,7 @@ async def run(full):
         print(json.dumps({'id':body.get('id'),'model':body.get('model'),'finish_reason':choice.get('finish_reason'),'usage':body.get('usage')},indent=2))
         if full:
             if choice.get('finish_reason')!='stop': raise SystemExit('Generation incomplete.')
-            validate_analysis(json.loads(choice['message']['content']),p,s)
+            validate_analysis(normalize_generation(json.loads(choice['message']['content'])),p,s)
             (out/'full-sources.json').write_text(json.dumps(s))
             print('Full structured validation passed. Semantic review still required.')
         else:

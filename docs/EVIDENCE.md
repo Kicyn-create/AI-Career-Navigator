@@ -9,9 +9,9 @@
 | Backend + UI | Local FastAPI candidate at port 8000; four-step intake, consent, error/edit flow manually exercised in Chrome | Verified |
 | Public sources | Five O*NET pages + four arXiv entries; real retrieval record in `evidence/source-fetch.json` | Live-tested |
 | Source-based matching | Administrative example returns Project Management Specialists first; component/gap/source display visible | Live-tested; lexical heuristic, no AI |
-| Offline checks | 20 Python tests, 8 Node tests, JS syntax, `pip check`, `.replit` TOML parse, `git diff --check` | Passed before live integration |
+| Offline checks | 22 Python tests, 8 Node tests, JS syntax, `pip check`, `.replit` TOML parse, `git diff --check` | Passed before live integration |
 | RunPod endpoint | cckbk8134lpxf8, Qwen3-4B-Instruct-2507, worker v2.29.0, 24GB GPU, max 1 worker | Provisioned by owner; candidate config saved |
-| Server credential | Owner-approved endpoint-only read/write API key, GraphQL disabled, saved only in ignored `.env` | Configured |
+| Server credential | Owner-approved endpoint-only read/write API key, GraphQL disabled, saved in ignored `.env` and existing Replit Secrets | Configured |
 | Real inference | Real structured smoke request `chatcmpl-a71573c2671223a6`, HTTP 200, JSON status ready, 31 tokens, 117.6s including cold start | Smoke passed; full report evaluation in progress |
 | Production release | Existing URL still serves the previous scripted V0.1 | Candidate not published |
 

@@ -1,4 +1,4 @@
-run = "python -m uvicorn src.career.api:app --host 0.0.0.0 --port 8000"
+run = "sh scripts/replit_start.sh"
 entrypoint = "src/career/api.py"
 modules = ["python-3.12"]
 
@@ -7,8 +7,8 @@ channel = "stable-24_05"
 
 [deployment]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "python -m pip install -r requirements.txt"]
-run = ["sh", "-c", "python -m uvicorn src.career.api:app --host 0.0.0.0 --port 8000 --workers 1"]
+build = ["sh", "-c", "uv venv .venv-replit && uv pip install --python .venv-replit/bin/python -r requirements.txt"]
+run = ["sh", "scripts/replit_start.sh"]
 
 [[ports]]
 localPort = 8000
